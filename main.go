@@ -1,39 +1,43 @@
 package main
 
 import (
-	"log"
-	"net/http"
+    "log"
+    "net/http"
+    "time"
 )
 
 func homePage(w http.ResponseWriter, r *http.Request) {
-	// Render the home html page from static folder
-	http.ServeFile(w, r, "static/home.html")
+    http.ServeFile(w, r, "static/home.html")
 }
 
 func coursePage(w http.ResponseWriter, r *http.Request) {
-	// Render the course html page
-	http.ServeFile(w, r, "static/courses.html")
+    http.ServeFile(w, r, "static/courses.html")
 }
 
 func aboutPage(w http.ResponseWriter, r *http.Request) {
-	// Render the about html page
-	http.ServeFile(w, r, "static/about.html")
+    http.ServeFile(w, r, "static/about.html")
 }
 
 func contactPage(w http.ResponseWriter, r *http.Request) {
-	// Render the contact html page
-	http.ServeFile(w, r, "static/contact.html")
+    http.ServeFile(w, r, "static/contact.html")
 }
 
 func main() {
+    mux := http.NewServeMux()
+    mux.HandleFunc("/home", homePage)
+    mux.HandleFunc("/courses", coursePage)
+    mux.HandleFunc("/about", aboutPage)
+    mux.HandleFunc("/contact", contactPage)
 
-	http.HandleFunc("/home", homePage)
-	http.HandleFunc("/courses", coursePage)
-	http.HandleFunc("/about", aboutPage)
-	http.HandleFunc("/contact", contactPage)
+    server := &http.Server{
+        Addr:         "0.0.0.0:8080",
+        Handler:      mux,
+        ReadTimeout:  5 * time.Second,
+        WriteTimeout: 10 * time.Second,
+        IdleTimeout:  120 * time.Second,
+    }
 
-	err := http.ListenAndServe("0.0.0.0:8080", nil)
-	if err != nil {
-		log.Fatal(err)
-	}
+    log.Println("Starting server on :8080")
+    log.Fatal(server.ListenAndServe())
 }
+``
