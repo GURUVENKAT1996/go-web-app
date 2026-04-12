@@ -34,6 +34,6 @@ func main() {
 
 	err := http.ListenAndServe("0.0.0.0:8080", nil)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("Failed to start server on 0.0.0.0:8080: %v", err)
 	}
 }
