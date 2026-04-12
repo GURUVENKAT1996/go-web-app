@@ -28,7 +28,13 @@ jobs:
     - name: Verify Go version
       run: go version
 
+    - name: Clear Go Cache
+      run: go clean -cache -modcache -i -r
+
     - name: Build
+      env:
+        GOROOT: /opt/hostedtoolcache/go/1.20/x64
+        GOPATH: ${{ runner.temp }}
       run: go build -o go-web-app
 
     - name: Test
